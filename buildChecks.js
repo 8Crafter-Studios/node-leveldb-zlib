@@ -94,6 +94,7 @@ if (runCmake) {
             cp.execSync("./emsdk/emsdk install latest", { stdio: "inherit" });
             cp.execSync("./emsdk/emsdk activate latest", { stdio: "inherit" });
 
+            const path = require("path");
             function runEmsdkEnv(emsdkRoot) {
                 let cmd;
 
