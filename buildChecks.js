@@ -89,7 +89,7 @@ async function runChecks() {
 if (runCmake) {
     runChecks().then(() => {
         console.log("Build checks are passing! Building...");
-        if (process.env.BUILDING_WASM) {
+        if (process.env.BUILDING_WASM === "true") {
             console.log("Building WASM...");
             cp.execSync("./emsdk/emsdk install latest", { stdio: "inherit" });
             cp.execSync("./emsdk/emsdk activate latest", { stdio: "inherit" });
@@ -112,7 +112,7 @@ if (runCmake) {
                     cmd = `bash -c "source '${sh}'"`;
                 }
 
-                execSync(cmd, { stdio: "inherit" });
+                cp.execSync(cmd, { stdio: "inherit" });
             }
             runEmsdkEnv(path.join(process.cwd(), "emsdk"));
 
