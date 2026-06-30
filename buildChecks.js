@@ -91,8 +91,9 @@ if (runCmake) {
         console.log("Build checks are passing! Building...");
         if (process.env.BUILDING_WASM) {
             console.log("Building WASM...");
-            cp.execSync("./emsdk/emsdk install latest");
-            cp.execSync("./emsdk/emsdk activate latest");
+            cp.execSync("./emsdk/emsdk install latest", { stdio: "inherit" });
+            cp.execSync("./emsdk/emsdk activate latest", { stdio: "inherit" });
+            cp.execSync("./emsdk/emsdk_env", { stdio: "inherit" });
             cp.execSync(
                 'emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"',
                 { stdio: "inherit" }
