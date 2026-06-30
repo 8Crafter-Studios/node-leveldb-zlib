@@ -1,4 +1,4 @@
-const binding = require('../binding_node')
+import binding from '../binding_wasm'
 
 export class Iterator {
   #lock?: Promise<any>

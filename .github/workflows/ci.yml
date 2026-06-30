@@ -14,8 +14,19 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [16.x]
+        include:
+          - os: ubuntu-latest
+            node-version: [16.x]
+            wasm: false
+          - os: windows-latest
+            node-version: [16.x]
+            wasm: false
+          - os: macos-latest
+            node-version: [16.x]
+            wasm: false
+          - os: ubuntu-latest
+            node-version: [16.x]
+            wasm: true
         
     runs-on: ${{ matrix.os }}
 
@@ -28,18 +39,41 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+      env:
+        BUILDING_WASM: ${{ matrix.wasm }}
     - run: npm run build --if-present
+      env:
+        BUILDING_WASM: ${{ matrix.wasm }}
     - run: npm test
+      env:
+        BUILDING_WASM: ${{ matrix.wasm }}
     - run: npm run postci
+      env:
+        BUILDING_WASM: ${{ matrix.wasm }}
       id: postci
     # - name: Display structure of downloaded files
     #   run: ls -R
-    - name: Upload artifact
+    - name: Upload artifact (Node)
+      if: matrix.wasm == false
       uses: actions/upload-artifact@v4
       with:
         name: dist-${{ steps.postci.outputs.PLATFORM_STRING }}
         path: |
           build/Release/*
+    - name: Upload artifact (WASM (JS))
+      if: matrix.wasm == true
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-leveldb_wasm.js
+        path: |
+          build-wasm/leveldb_wasm.js
+    - name: Upload artifact (WASM)
+      if: matrix.wasm == true
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-leveldb_wasm.wasm
+        path: |
+          build-wasm/leveldb_wasm.wasm
   debug:
     runs-on: ubuntu-latest
     steps:

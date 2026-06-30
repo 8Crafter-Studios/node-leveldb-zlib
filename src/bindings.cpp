@@ -1,5 +1,7 @@
 #define NAPI_VERSION 3
 
+#include "../wasm/emnapi_import.h"
+
 #include "napi-macros.h"
 #include <node_api.h>
 #include <assert.h>

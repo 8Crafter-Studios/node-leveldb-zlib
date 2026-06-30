@@ -4,9 +4,12 @@ yarn.lock
 package-lock.json
 # Build data
 build/
+build-wasm/
 js
+js_wasm
 *.log
 __*
+*.tsbuildinfo
 # our stuff
 prebuilds
 docs/*db*

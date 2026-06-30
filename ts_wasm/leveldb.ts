@@ -1,8 +1,6 @@
 import { ChainedBatch } from "./chainedBatch";
 import { Iterator } from "./iterator";
-
-const binding = require("../binding_node");
-const debug = require("debug")("leveldb");
+import binding from "../binding_wasm";
 
 export interface LevelDBOptions {
     bufferKeys?: boolean;
@@ -87,11 +85,9 @@ export class LevelDB {
         return await new Promise((res, rej) => {
             binding.db_open(this.context, this.path, this.options, (err) => {
                 if (err) {
-                    debug("[leveldb] Failed to open db ", this.path, this.options, err);
                     rej(Error(err));
                 } else {
                     this.status = "open";
-                    debug("[leveldb] DB was opened at: ", this.path);
                     globalThis.levelDbOpened.add(this.path);
                     res(true);
                 }
@@ -215,7 +211,6 @@ export class LevelDB {
             throw new Error("cannot call iterator() before open()");
         }
         Iterator._setupIteratorOptions(options);
-        debug("iter using options", options);
         return new Iterator(this, options);
     }
 
