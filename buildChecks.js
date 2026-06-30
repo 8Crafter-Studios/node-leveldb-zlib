@@ -110,15 +110,37 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "
                 cp.execSync(
                     `
 bash -c "
+  set -e
+
+  sudo apt-get update
+  sudo apt-get install -y ninja-build
+
   ./emsdk/emsdk install latest &&
   ./emsdk/emsdk activate latest &&
   source ./emsdk/emsdk_env.sh &&
-  emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake" &&
+
+  emcmake cmake -B build-wasm -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=\\"$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\" &&
+
   cmake --build build-wasm
 "
 `,
                     { stdio: "inherit" }
                 );
+
+                //                 cp.execSync(
+                //                     `
+                // bash -c "
+                //   ./emsdk/emsdk install latest &&
+                //   ./emsdk/emsdk activate latest &&
+                //   source ./emsdk/emsdk_env.sh &&
+                //   emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake" &&
+                //   cmake --build build-wasm
+                // "
+                // `,
+                //                     { stdio: "inherit" }
+                //                 );
             }
             // cp.execSync("./emsdk/emsdk install latest", { stdio: "inherit" });
             // cp.execSync("./emsdk/emsdk activate latest", { stdio: "inherit" });
