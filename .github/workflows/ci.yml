@@ -16,16 +16,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            node-version: [16.x]
+            node-version: 16.x
             wasm: false
           - os: windows-latest
-            node-version: [16.x]
+            node-version: 16.x
             wasm: false
           - os: macos-latest
-            node-version: [16.x]
+            node-version: 16.x
             wasm: false
           - os: ubuntu-latest
-            node-version: [16.x]
+            node-version: 16.x
             wasm: true
         
     runs-on: ${{ matrix.os }}
