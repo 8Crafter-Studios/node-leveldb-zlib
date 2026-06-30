@@ -1,3 +1,6 @@
 [submodule "leveldb-mcpe"]
 	path = leveldb-mcpe
 	url = https://github.com/8Crafter-Studios/leveldb-mcpe.git
+[submodule "emsdk"]
+	path = emsdk
+	url = https://github.com/emscripten-core/emsdk.git
