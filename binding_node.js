@@ -50,6 +50,7 @@ if (pathToSearch) {
 }
 if (!bindings) {
     bindings = require("bindings")("node-leveldb.node");
+    console.log("[leveldb] loaded lib from node-leveldb.node as fallback ", bindings)
 }
 
 module.exports = bindings;
