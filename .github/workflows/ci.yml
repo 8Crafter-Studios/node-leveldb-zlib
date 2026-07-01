@@ -41,15 +41,19 @@ jobs:
     - run: npm install
       env:
         BUILDING_WASM: ${{ matrix.wasm }}
+        DEBUG: "*"
     - run: npm run build --if-present
       env:
         BUILDING_WASM: ${{ matrix.wasm }}
+        DEBUG: "*"
     - run: npm test
       env:
         BUILDING_WASM: ${{ matrix.wasm }}
+        DEBUG: "*"
     - run: npm run postci
       env:
         BUILDING_WASM: ${{ matrix.wasm }}
+        DEBUG: "*"
       id: postci
     # - name: Display structure of downloaded files
     #   run: ls -R

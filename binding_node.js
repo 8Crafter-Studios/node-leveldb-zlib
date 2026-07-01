@@ -21,6 +21,7 @@ if (pathToSearch) {
     const rpath = path.join(__dirname, pathToSearch, "node-leveldb.node");
     try {
         bindings = require(rpath);
+        debug("[leveldb] loaded lib from ", rpath);
     } catch (e) {
         debug(e);
         debug("[leveldb] did not find lib in ", rpath);
@@ -52,4 +53,3 @@ if (!bindings) {
 }
 
 module.exports = bindings;
-
