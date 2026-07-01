@@ -107,24 +107,59 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "
                 );
             } else {
                 // Linux/macOS
+                //                 cp.execSync(
+                //                     `
+                // bash --login -c "
+                //   set -e
+
+                //   sudo apt-get update
+                //   sudo apt-get install -y ninja-build
+
+                //   ./emsdk/emsdk install latest &&
+                //   ./emsdk/emsdk activate latest &&
+
+                //   source ./emsdk/emsdk_env.sh &&
+                //   for var in $(env | grep -E '^EMSDK|^EM_CONFIG|^EM_CACHE|^EMSDK_NODE|^EMSDK_PYTHON' | cut -d= -f1); do
+                //     export "$var"
+                //   done &&
+                //   export PATH
+
+                //   emcmake cmake -B build-wasm -G Ninja \
+                //     -DCMAKE_BUILD_TYPE=Release \
+                //     -DCMAKE_TOOLCHAIN_FILE=\\"$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\" &&
+
+                //   cmake --build build-wasm
+                // "
+                // `,
+                //                     { stdio: "inherit" }
+                //                 );
                 cp.execSync(
                     `
-bash --login -c "
+bash --login -c '
   set -e
 
   sudo apt-get update
   sudo apt-get install -y ninja-build
 
-  ./emsdk/emsdk install latest &&
-  ./emsdk/emsdk activate latest &&
-  source ./emsdk/emsdk_env.sh &&
+  ./emsdk/emsdk install latest
+  ./emsdk/emsdk activate latest
 
+  # Source env script
+  source ./emsdk/emsdk_env.sh
+
+  # Export ALL variables that construct_env created
+  # (env cannot see them, but declare -p can)
+  while IFS== read -r name value; do
+    export "$name"="$value"
+  done < <(declare -p | grep -E "declare -- (EMSDK|EM_CONFIG|EM_CACHE|EMSDK_NODE|EMSDK_PYTHON)=" | sed "s/declare -- //")
+
+  # Now EMSDK is exported, and Node cannot expand it because we escape the $
   emcmake cmake -B build-wasm -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_TOOLCHAIN_FILE=\\"$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\" &&
+    -DCMAKE_TOOLCHAIN_FILE="\$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
 
   cmake --build build-wasm
-"
+'
 `,
                     { stdio: "inherit" }
                 );
