@@ -109,7 +109,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "
                 // Linux/macOS
                 cp.execSync(
                     `
-bash -c "
+bash --login -c "
   set -e
 
   sudo apt-get update
