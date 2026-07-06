@@ -56,7 +56,7 @@ jobs:
         DEBUG: leveldb
       # DEBUG
     - name: DEBUG - List Files (WASM) (Windows)
-      if: matrix.wasm == true && matrix.os == 'windows-latest'
+      if: matrix.wasm == true && matrix.os == 'windows-latest' && always()
       shell: pwsh
       run: Get-ChildItem -Recurse -Force | Select-Object FullName
     - run: npm run postci
