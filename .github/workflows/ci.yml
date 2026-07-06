@@ -92,44 +92,42 @@ jobs:
     steps:
     - name: Debug Action
       uses: hmarr/debug-action@v1.0.0
-  # DEBUG
-  # TEMP
-  # release:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: startsWith(github.ref, 'refs/heads/master')
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         submodules: true
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 14
-  #         registry-url: https://registry.npmjs.org/
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/master')
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
 
-  #     - name: Download artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         path: helpers
-  #     - run: npm install
-  #       env: 
-  #         SKIP_BUILD: true
-  #     - id: publish
-  #       uses: JS-DevTools/npm-publish@v1
-  #       with:
-  #         token: ${{ secrets.npm_token }}
-  #     - name: Create Release
-  #       if: steps.publish.outputs.type != 'none'
-  #       id: create_release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ steps.publish.outputs.version }}
-  #         release_name: Release ${{ steps.publish.outputs.version }}
-  #         body: ${{ steps.publish.outputs.version }}
-  #         draft: false
-  #         prerelease: false 
-  #     - name: Display structure of downloaded files
-  #       run: ls -R
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: helpers
+      - run: npm install
+        env: 
+          SKIP_BUILD: true
+      - id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.npm_token }}
+      - name: Create Release
+        if: steps.publish.outputs.type != 'none'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.publish.outputs.version }}
+          release_name: Release ${{ steps.publish.outputs.version }}
+          body: ${{ steps.publish.outputs.version }}
+          draft: false
+          prerelease: false 
+      - name: Display structure of downloaded files
+        run: ls -R

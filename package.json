@@ -1,6 +1,6 @@
 {
     "name": "@8crafter/leveldb-zlib",
-    "version": "2.0.0",
+    "version": "2.0.0-alpha.1",
     "description": "Node.js and WebAssembly bindings for LevelDB with zlib",
     "main": "index_node.js",
     "module": "index_wasm.js",
