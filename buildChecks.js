@@ -96,15 +96,43 @@ if (runCmake) {
                 cp.execSync(
                     `
 powershell -NoProfile -ExecutionPolicy Bypass -Command "
-  ./emsdk/emsdk install latest;
-  ./emsdk/emsdk activate latest;
-  . ./emsdk/emsdk_env.ps1;
-  emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake";
+  Set-StrictMode -Version Latest
+  \\$ErrorActionPreference = 'Stop'
+
+  # Install Ninja (Windows equivalent of apt-get install ninja-build)
+  choco install ninja -y
+
+  # Install and activate EMSDK
+  ./emsdk/emsdk install latest
+  ./emsdk/emsdk activate latest
+
+  # Load EMSDK environment (this exports EMSDK, EMSDK_NODE, PATH, etc.)
+  . ./emsdk/emsdk_env.ps1
+
+  # Run emcmake with correct toolchain path
+  emcmake cmake -B build-wasm -G Ninja \`
+    -DCMAKE_BUILD_TYPE=Release \`
+    -DCMAKE_TOOLCHAIN_FILE=\\"\\$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\"
+
+  # Build WASM
   cmake --build build-wasm
 "
 `,
                     { stdio: "inherit" }
                 );
+
+                //                 cp.execSync(
+                //                     `
+                // powershell -NoProfile -ExecutionPolicy Bypass -Command "
+                //   ./emsdk/emsdk install latest;
+                //   ./emsdk/emsdk activate latest;
+                //   . ./emsdk/emsdk_env.ps1;
+                //   emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake";
+                //   cmake --build build-wasm
+                // "
+                // `,
+                //                     { stdio: "inherit" }
+                //                 );
             } else {
                 // Linux/macOS
                 //                 cp.execSync(

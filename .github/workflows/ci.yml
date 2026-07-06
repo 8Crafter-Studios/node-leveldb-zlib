@@ -24,7 +24,7 @@ jobs:
           - os: macos-latest
             node-version: 16.x
             wasm: false
-          - os: ubuntu-latest
+          - os: windows-latest
             node-version: 16.x
             wasm: true
         
