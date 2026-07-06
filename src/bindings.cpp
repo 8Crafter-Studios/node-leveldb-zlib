@@ -1,6 +1,8 @@
 #define NAPI_VERSION 3
 
+#ifdef __EMSCRIPTEN__
 #include "../wasm/emnapi_import.h"
+#endif
 
 #include "napi-macros.h"
 #include <node_api.h>
