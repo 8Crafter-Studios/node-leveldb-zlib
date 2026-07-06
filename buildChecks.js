@@ -121,7 +121,7 @@ if (runCmake) {
                 //                     { stdio: "inherit" }
                 //                 );
                 cp.execSync(
-                    'powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-StrictMode -Version Latest; $ErrorActionPreference = \'Stop\'; choco install ninja -y; ./emsdk/emsdk install latest; ./emsdk/emsdk activate latest; . ./emsdk/emsdk_env.ps1; emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=\\"$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\"; cmake --build build-wasm"',
+                    'powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference = \'Stop\'; choco install ninja -y; ./emsdk/emsdk install latest; ./emsdk/emsdk activate latest; . ./emsdk/emsdk_env.ps1; emcmake cmake -B build-wasm -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=\\"$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\"; cmake --build build-wasm"',
                     { stdio: "inherit" }
                 );
 
