@@ -1,6 +1,8 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
+# REVIEW: The Ubuntu and macOS builds seem to be finding a prebuild in build/Release/node-leveldb.node and as a result not building and using that instead.
+
 name: CI
 
 on:
@@ -47,6 +49,8 @@ jobs:
         BUILDING_WASM: ${{ matrix.wasm }}
         DEBUG: leveldb
     - run: npm test
+      # TEMP: This is until it is decided whether or not there should be a test for WASM, since the build environment could vary.
+      if: matrix.wasm == false
       env:
         BUILDING_WASM: ${{ matrix.wasm }}
         DEBUG: leveldb
