@@ -97,7 +97,7 @@ if (runCmake) {
                     `
 powershell -NoProfile -ExecutionPolicy Bypass -Command "
   Set-StrictMode -Version Latest
-  \\$ErrorActionPreference = 'Stop'
+  $ErrorActionPreference = 'Stop'
 
   # Install Ninja (Windows equivalent of apt-get install ninja-build)
   choco install ninja -y
@@ -112,7 +112,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "
   # Run emcmake with correct toolchain path
   emcmake cmake -B build-wasm -G Ninja \`
     -DCMAKE_BUILD_TYPE=Release \`
-    -DCMAKE_TOOLCHAIN_FILE=\\"\\$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\"
+    -DCMAKE_TOOLCHAIN_FILE=\\"$env:EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake\\"
 
   # Build WASM
   cmake --build build-wasm
