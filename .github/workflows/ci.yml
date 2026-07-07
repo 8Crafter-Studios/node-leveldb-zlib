@@ -92,31 +92,37 @@ jobs:
     steps:
     - name: Debug Action
       uses: hmarr/debug-action@v1.0.0
+
   release:
+    permissions:
+      contents: write
+      id-token: write
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/master')
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
         with:
           submodules: true
+
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v6
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://registry.npmjs.org/
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: helpers
+
       - run: npm install
         env: 
           SKIP_BUILD: true
+
       - id: publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.npm_token }}
+        run: npm publish
+
       - name: Create Release
         if: steps.publish.outputs.type != 'none'
         id: create_release
@@ -129,5 +135,6 @@ jobs:
           body: ${{ steps.publish.outputs.version }}
           draft: false
           prerelease: false 
+
       - name: Display structure of downloaded files
         run: ls -R
