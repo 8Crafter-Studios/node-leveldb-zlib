@@ -120,21 +120,19 @@ jobs:
         env: 
           SKIP_BUILD: true
 
-      - id: publish
-        run: npm publish
+      - name: Publish to npm
+        run: npm publish --provenance
+
+      - id: version # extract version from package.json file, to replace the output from `publish`
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Create Release
-        if: steps.publish.outputs.type != 'none'
-        id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.publish.outputs.version }}
-          release_name: Release ${{ steps.publish.outputs.version }}
-          body: ${{ steps.publish.outputs.version }}
-          draft: false
-          prerelease: false 
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" \
+            --title "Release ${{ steps.version.outputs.version }}" \
+            --notes "${{ steps.version.outputs.version }}"
 
       - name: Display structure of downloaded files
         run: ls -R
